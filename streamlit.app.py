@@ -1,6 +1,5 @@
 # Import python packages
 import streamlit as st
-from snowflake.snowpark.context import get_active_session
 from snowflake.snowpark.functions import col
 
 # Write directly to the app
@@ -8,12 +7,13 @@ st.title(":cup_with_straw: customize your smoothie! : cup_with_straw:")
 st.write(
     """Orders that need to filled.""") 
 
-
-session = get_active_session()
+cnx= st.connection("snowflake")
+session =cnx.session()
 my_dataframe = session.table("smoothies.public.orders").filter(col("ORDER_FILLED")==0).collect()
 editable_df = st.experimental_data_editor(my_dataframe)
 
-
+cnx= st.connection("snowflake")
+session =cnx.session()
 
 
 ingredients_list = st.multiselect(
